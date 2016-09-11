@@ -9,8 +9,18 @@
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
 
     <script>
+        var de
+        de= false;
+
+        function ajaxPostDelete(name) {
+            console.log(self.data);
+            de = true;
+            $("#name").val(name);
+            ajaxPost();
+            de = false;
+        }
         function ajaxPost() {
-            var data = [{ "User" : { "name" : $("#name").val()}}];
+            var data = [{ "User" : { "name" : $("#name").val()}, "delete" : de}];
 
             $.ajax({
                 type : "POST",
@@ -21,19 +31,50 @@
                     jsonResult = JSON.parse(result);
                     console.log(jsonResult);
                     alert("Name: " + jsonResult[0].User.name);
+                    if (!jsonResult[0].delete) {
+                        $("#users").append('<tr><td>' + jsonResult[0].User.name + '</td> <td class="col-md-1"><button class="btn btn-danger" onclick="ajaxPostDelete(\'' + jsonResult[0].User.name + '\')">Delete <i class="fa fa-trash"></i></button></td></tr>');
+                    } else {
+                        $("#users").find("td").each( function(){
+                          if($(this).text() == jsonResult[0].User.name) {
+                            console.log($(this).parent().remove());
+                          }
+                        });
+                    }
                 }
             });
+            $("#name").val("");
         }
     </script>
 </head>
 <body>
 <div class="container">
     <h1 class="text-center">Ajax Post Request</h1>
-     <div class="form-group">
+    <!--<form>-->
+
          <label for="name">Name</label>
+    <div class="row form-group">
+    <div class="col-md-11">
+
          <input class="form-control" type="text" id="name" placeholder="Name">
+        </div>
+        <div class="col-md-1">
+    <button class="btn btn-primary" onclick="ajaxPost()">Send <i class="fa fa-check"></i></button>
     </div>
-    <button class="btn btn-primary btn-lg center-block" onclick="ajaxPost()">Send <i class="fa fa-check"></i></button>
+    </div>
+    <table id="users" class="table table-striped table-hover">
+    {% if page.records %}
+        <tr>
+            <th>Number</th>
+        </tr>
+        {% for i in page.records %}
+            <tr>
+                <td>{{i.name}}</td>
+                <td class="col-md-1" ><button class="btn btn-danger" onclick="ajaxPostDelete('{{i.name}}')">Delete <i class="fa fa-trash"></i></button></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </table>
+    <!--</form>-->
 </div>
 </body>
 </html>
