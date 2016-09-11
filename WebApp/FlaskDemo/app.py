@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+
 
 app = Flask(__name__)
 
@@ -18,11 +19,8 @@ def hello():
 @app.route("/ajax", methods=["GET", "POST"])
 def load_ajax():
     if request.method == "POST":
-        # load _sid and _uip from posted JSON and save other data
-        # but request.form is empty.
-        # >>> request.form
-        # ImmutableMultiDict([])
-        return str(request.form)
+        app.logger.info(request.data)
+        return request.data
     else:
         page = dict({"title" : "Hello World"})
         return render_template('ajax.html', page=page)
@@ -37,4 +35,5 @@ def getMember(name):
 
 
 if __name__ == "__main__":
+    app.debug = True
     app.run()

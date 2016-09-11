@@ -3,13 +3,14 @@
     <title>Website</title>
 <style>
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css);
 </style>
 
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
 
     <script>
-        function testClick() {
-            var data = "jlkjljjll" // data
+        function ajaxPost() {
+            var data = [{ "User" : { "name" : $("#name").val()}}];
 
             $.ajax({
                 type : "POST",
@@ -17,17 +18,22 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json;charset=UTF-8',
                 success: function(result) {
-                    console.log(result);
+                    jsonResult = JSON.parse(result);
+                    console.log(jsonResult);
+                    alert("Name: " + jsonResult[0].User.name);
                 }
             });
-
-            console.log(data);
         }
     </script>
 </head>
 <body>
-<div>
-    <button onclick="testClick()">Click</button>
+<div class="container">
+    <h1 class="text-center">Ajax Post Request</h1>
+     <div class="form-group">
+         <label for="name">Name</label>
+         <input class="form-control" type="text" id="name" placeholder="Name">
+    </div>
+    <button class="btn btn-primary btn-lg center-block" onclick="ajaxPost()">Send <i class="fa fa-check"></i></button>
 </div>
 </body>
 </html>
