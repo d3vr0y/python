@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Website</title>
+<style>
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css);
+</style>
+
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+
+    <script>
+        function testClick() {
+            var data = "jlkjljjll" // data
+
+            $.ajax({
+                type : "POST",
+                url : "/ajax",
+                data: JSON.stringify(data),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+                    console.log(result);
+                }
+            });
+
+            console.log(data);
+        }
+    </script>
+</head>
+<body>
+<div>
+    <button onclick="testClick()">Click</button>
+</div>
+</body>
+</html>

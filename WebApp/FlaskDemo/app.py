@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -13,6 +13,19 @@ def index():
 def hello():
     page = dict({"title" : "Hello World"})
     return render_template('test.html', page=page)
+
+
+@app.route("/ajax", methods=["GET", "POST"])
+def load_ajax():
+    if request.method == "POST":
+        # load _sid and _uip from posted JSON and save other data
+        # but request.form is empty.
+        # >>> request.form
+        # ImmutableMultiDict([])
+        return str(request.form)
+    else:
+        page = dict({"title" : "Hello World"})
+        return render_template('ajax.html', page=page)
 
 
 @app.route("/hello/<string:name>/")
